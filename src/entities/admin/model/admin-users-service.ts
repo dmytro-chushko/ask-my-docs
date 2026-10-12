@@ -1,4 +1,4 @@
-import { recordAuditLog } from '@/entities/audit-log';
+import { recordAuditLog } from '@/entities/audit-log/model/record-audit-log';
 import { Prisma } from '@/generated/prisma/client';
 import {
   ADMIN_USERS_ERROR_MESSAGES,

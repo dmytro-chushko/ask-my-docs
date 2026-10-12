@@ -1,6 +1,6 @@
 import { APIError, createAuthMiddleware, isAPIError } from 'better-auth/api';
 
-import { recordAuditLog } from '@/entities/audit-log';
+import { recordAuditLog } from '@/entities/audit-log/model/record-audit-log';
 
 import { getAuditRequestContextFromHeaders } from './request-audit-context';
 

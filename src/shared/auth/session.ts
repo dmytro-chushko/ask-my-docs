@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 import { getLocale } from 'next-intl/server';
 
-import { recordAuditLog } from '@/entities/audit-log';
+import { recordAuditLog } from '@/entities/audit-log/model/record-audit-log';
 import { redirect } from '@/i18n/navigation';
 import { auth, type Session } from '@/shared/auth/auth';
 import { getAuditRequestContext } from '@/shared/auth/request-audit-context';
