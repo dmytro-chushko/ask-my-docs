@@ -120,3 +120,85 @@ export const adminRevokeSessionsResultSchema = z.object({
 export type AdminRevokeSessionsResult = z.infer<
   typeof adminRevokeSessionsResultSchema
 >;
+
+export const AUDIT_LOGS_PAGE_SIZE_DEFAULT = 20;
+export const AUDIT_LOGS_PAGE_SIZE_MAX = 100;
+
+export const auditActionSchema = z.enum([
+  'LOGIN_SUCCESS',
+  'LOGIN_FAILED',
+  'LOGOUT',
+  'ADMIN_ACCESS_DENIED',
+  'USER_ROLE_CHANGED',
+  'USER_DELETED',
+  'SESSIONS_REVOKED',
+  'ACCOUNT_SELF_DELETED',
+]);
+
+export type AuditAction = z.infer<typeof auditActionSchema>;
+
+export const auditLogUserSummarySchema = z.object({
+  id: z.string(),
+  email: z.email(),
+  name: z.string().nullable(),
+});
+
+export type AuditLogUserSummary = z.infer<typeof auditLogUserSummarySchema>;
+
+export const auditLogItemSchema = z.object({
+  id: z.string(),
+  action: auditActionSchema,
+  actorId: z.string().nullable(),
+  targetUserId: z.string().nullable(),
+  ipAddress: z.string().nullable(),
+  userAgent: z.string().nullable(),
+  success: z.boolean(),
+  metadata: z.record(z.string(), z.unknown()).nullable(),
+  createdAt: z.coerce.date(),
+  actor: auditLogUserSummarySchema.nullable(),
+  targetUser: auditLogUserSummarySchema.nullable(),
+});
+
+export type AuditLogItem = z.infer<typeof auditLogItemSchema>;
+
+export const auditLogListResultSchema = z.object({
+  items: z.array(auditLogItemSchema),
+  total: z.number().int().nonnegative(),
+  page: z.number().int().positive(),
+  pageSize: z.number().int().positive(),
+});
+
+export type AuditLogListResult = z.infer<typeof auditLogListResultSchema>;
+
+export const auditLogsListQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(AUDIT_LOGS_PAGE_SIZE_MAX)
+    .default(AUDIT_LOGS_PAGE_SIZE_DEFAULT),
+  action: auditActionSchema.optional(),
+  actorId: z.string().optional(),
+  targetUserId: z.string().optional(),
+  from: z.coerce.date().optional(),
+  to: z.coerce.date().optional(),
+  sortBy: z.enum(['createdAt', 'action']).default('createdAt'),
+  sortOrder: z.enum(['asc', 'desc']).default('desc'),
+});
+
+/** Parsed query (server side, after Zod validation). */
+export type AuditLogsListQuery = z.output<typeof auditLogsListQuerySchema>;
+
+/** Raw HTTP query params (ts-rest client `query` argument). */
+export type AuditLogsListQueryParams = z.input<typeof auditLogsListQuerySchema>;
+
+export function toAuditLogsListQueryParams(
+  query: AuditLogsListQuery,
+): AuditLogsListQueryParams {
+  return {
+    ...query,
+    from: query.from?.toISOString(),
+    to: query.to?.toISOString(),
+  };
+}

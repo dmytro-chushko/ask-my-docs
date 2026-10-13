@@ -1,4 +1,4 @@
-import { recordAuditLog } from '@/entities/audit-log';
+import { recordAuditLog } from '@/entities/audit-log/model/record-audit-log';
 import { apiErrorResponse } from '@/shared/api/helpers/api-error-response';
 
 import type { Session } from './auth';

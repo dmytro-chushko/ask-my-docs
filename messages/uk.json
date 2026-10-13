@@ -183,7 +183,58 @@
     },
     "auditLogs": {
       "title": "Журнал аудиту",
-      "description": "Історія аудиту буде доступна після додавання моделі журналу."
+      "description": "Події безпеки в робочому просторі.",
+      "columns": {
+        "createdAt": "Час",
+        "action": "Дія",
+        "actor": "Хто",
+        "target": "Ціль",
+        "success": "Результат",
+        "details": "Деталі"
+      },
+      "actions": {
+        "LOGIN_SUCCESS": "Успішний вхід",
+        "LOGIN_FAILED": "Невдалий вхід",
+        "LOGOUT": "Вихід",
+        "ADMIN_ACCESS_DENIED": "Відмовлено в доступі до адмінки",
+        "USER_ROLE_CHANGED": "Змінено роль",
+        "USER_DELETED": "Користувача видалено",
+        "SESSIONS_REVOKED": "Сесії завершено",
+        "ACCOUNT_SELF_DELETED": "Самостійне видалення акаунта"
+      },
+      "filters": {
+        "action": "Дія",
+        "actionAll": "Усі дії",
+        "from": "Від дати",
+        "to": "До дати"
+      },
+      "filtersButton": "Фільтри",
+      "filtersButtonWithCount": "Фільтри ({count})",
+      "filtersTitle": "Фільтри",
+      "filtersDone": "Готово",
+      "empty": "Немає подій аудиту за поточними фільтрами.",
+      "clearFilters": "Скинути фільтри",
+      "anonymous": "Анонімно",
+      "targetNone": "Немає",
+      "successYes": "Успіх",
+      "successNo": "Помилка",
+      "detailsToggle": "Показати деталі",
+      "detailsEmpty": "Без деталей",
+      "viewTargetAriaLabel": "Переглянути {email}",
+      "retry": "Спробувати ще раз",
+      "loadError": "Не вдалося завантажити журнал аудиту. Спробуйте ще раз.",
+      "pagination": {
+        "previous": "Назад",
+        "next": "Далі",
+        "page": "Сторінка {page} з {totalPages}",
+        "previousAriaLabel": "Перейти до попередньої сторінки",
+        "nextAriaLabel": "Перейти до наступної сторінки"
+      },
+      "sort": {
+        "asc": "сортування за зростанням",
+        "desc": "сортування за спаданням",
+        "none": "без сортування"
+      }
     }
   },
   "profile": {

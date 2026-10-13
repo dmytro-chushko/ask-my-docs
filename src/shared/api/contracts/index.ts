@@ -33,11 +33,18 @@ export {
   ADMIN_USERS_PAGE_SIZE_DEFAULT,
   ADMIN_USERS_PAGE_SIZE_MAX,
   ADMIN_USERS_SEARCH_MAX_LENGTH,
+  AUDIT_LOGS_PAGE_SIZE_DEFAULT,
+  AUDIT_LOGS_PAGE_SIZE_MAX,
   adminUpdateUserRoleBodySchema,
   adminUserDetailSchema,
   adminUserListItemSchema,
   adminUsersListQuerySchema,
+  auditActionSchema,
+  auditLogItemSchema,
+  auditLogListResultSchema,
+  auditLogsListQuerySchema,
   toAdminUsersListQueryParams,
+  toAuditLogsListQueryParams,
 } from './schemas/admin';
 export type {
   AdminRevokeSessionsResult,
@@ -48,6 +55,12 @@ export type {
   AdminUserSessionSummary,
   AdminUsersListQuery,
   AdminUsersListQueryParams,
+  AuditAction,
+  AuditLogItem,
+  AuditLogListResult,
+  AuditLogUserSummary,
+  AuditLogsListQuery,
+  AuditLogsListQueryParams,
 } from './schemas/admin';
 export {
   badRequestResponse,

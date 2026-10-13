@@ -8,6 +8,8 @@ import {
   adminUserIdParamsSchema,
   adminUserListResultSchema,
   adminUsersListQuerySchema,
+  auditLogListResultSchema,
+  auditLogsListQuerySchema,
 } from './schemas/admin';
 import {
   badRequestResponse,
@@ -95,6 +97,20 @@ export const adminContract = c.router(
         500: internalServerErrorResponse,
       },
       summary: 'Revoke all sessions for a user (admin)',
+    },
+
+    listAuditLogs: {
+      method: 'GET',
+      path: '/audit-logs',
+      query: auditLogsListQuerySchema,
+      responses: {
+        200: auditLogListResultSchema,
+        400: badRequestResponse,
+        401: unauthorizedResponse,
+        403: forbiddenResponse,
+        500: internalServerErrorResponse,
+      },
+      summary: 'List security audit logs (admin)',
     },
   },
   {

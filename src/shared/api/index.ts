@@ -11,7 +11,11 @@ export {
   ADMIN_USERS_PAGE_SIZE_DEFAULT,
   ADMIN_USERS_PAGE_SIZE_MAX,
   ADMIN_USERS_SEARCH_MAX_LENGTH,
+  AUDIT_LOGS_PAGE_SIZE_DEFAULT,
+  AUDIT_LOGS_PAGE_SIZE_MAX,
+  auditActionSchema,
   toAdminUsersListQueryParams,
+  toAuditLogsListQueryParams,
 } from './contracts';
 export type {
   AppContract,
@@ -25,6 +29,10 @@ export type {
   AdminUserListResult,
   AdminUserSessionSummary,
   AdminUsersListQuery,
+  AuditAction,
+  AuditLogItem,
+  AuditLogListResult,
+  AuditLogsListQuery,
 } from './contracts';
 export { getApiBaseUrl } from './helpers/get-api-base-url';
 export { apiErrorResponse } from './helpers/api-error-response';
