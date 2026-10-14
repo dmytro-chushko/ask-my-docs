@@ -79,6 +79,7 @@ export const adminUsersListQuerySchema = z.object({
     .enum(['true', 'false'])
     .transform((value) => value === 'true')
     .optional(),
+  createdAfter: z.coerce.date().optional(),
   sortBy: z.enum(['createdAt', 'email']).default('createdAt'),
   sortOrder: z.enum(['asc', 'desc']).default('desc'),
 });
@@ -102,8 +103,21 @@ export function toAdminUsersListQueryParams(
         : query.verified
           ? 'true'
           : 'false',
+    createdAfter: query.createdAfter?.toISOString(),
   };
 }
+
+export const adminStatsSchema = z.object({
+  totalUsers: z.number().int().nonnegative(),
+  newUsersLast7Days: z.number().int().nonnegative(),
+  unverifiedUsers: z.number().int().nonnegative(),
+  adminCount: z.number().int().nonnegative(),
+  oauthOnlyUsers: z.number().int().nonnegative(),
+  newUsersSince: z.string(),
+  generatedAt: z.string(),
+});
+
+export type AdminStatsOverview = z.infer<typeof adminStatsSchema>;
 
 export const adminUpdateUserRoleBodySchema = z.object({
   role: roleSchema,

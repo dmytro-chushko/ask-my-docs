@@ -27,8 +27,9 @@ type UsersTableToolbarProps = {
 };
 
 function countSheetFilters(params: AdminUsersListQuery): number {
-  return [params.role, params.verified].filter((value) => value !== undefined)
-    .length;
+  return [params.role, params.verified, params.createdAfter].filter(
+    (value) => value !== undefined,
+  ).length;
 }
 
 export function UsersTableToolbar({

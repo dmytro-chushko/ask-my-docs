@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import {
   adminRevokeSessionsResultSchema,
+  adminStatsSchema,
   adminUpdateUserRoleBodySchema,
   adminUserDetailSchema,
   adminUserIdParamsSchema,
@@ -24,6 +25,18 @@ const c = initContract();
 /** Admin user management API. Every route requires an `admin` session cookie. */
 export const adminContract = c.router(
   {
+    getStats: {
+      method: 'GET',
+      path: '/stats',
+      responses: {
+        200: adminStatsSchema,
+        401: unauthorizedResponse,
+        403: forbiddenResponse,
+        500: internalServerErrorResponse,
+      },
+      summary: 'Admin overview statistics',
+    },
+
     listUsers: {
       method: 'GET',
       path: '/users',
