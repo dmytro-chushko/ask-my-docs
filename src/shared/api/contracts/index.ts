@@ -35,6 +35,7 @@ export {
   ADMIN_USERS_SEARCH_MAX_LENGTH,
   AUDIT_LOGS_PAGE_SIZE_DEFAULT,
   AUDIT_LOGS_PAGE_SIZE_MAX,
+  adminStatsSchema,
   adminUpdateUserRoleBodySchema,
   adminUserDetailSchema,
   adminUserListItemSchema,
@@ -48,6 +49,7 @@ export {
 } from './schemas/admin';
 export type {
   AdminRevokeSessionsResult,
+  AdminStatsOverview,
   AdminUpdateUserRoleBody,
   AdminUserDetail,
   AdminUserListItem,

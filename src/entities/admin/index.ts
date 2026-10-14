@@ -3,8 +3,10 @@ export {
   adminUsersQueryKey,
   adminUsersQueryKeyRoot,
 } from './api/keys/admin-users-query-key';
+export { adminStatsQueryKey } from './api/keys/admin-stats-query-key';
 export { useAdminUsersQuery } from './api/hooks/use-admin-users-query';
 export { useAdminUserQuery } from './api/hooks/use-admin-user-query';
+export { useAdminStatsQuery } from './api/hooks/use-admin-stats-query';
 export { useAdminUpdateRoleMutation } from './api/hooks/use-admin-update-role-mutation';
 export { useAdminRevokeSessionsMutation } from './api/hooks/use-admin-revoke-sessions-mutation';
 export { useAdminDeleteUserMutation } from './api/hooks/use-admin-delete-user-mutation';

@@ -6,6 +6,7 @@ export function hasAdminUsersActiveFilters(
   return (
     params.search !== undefined ||
     params.role !== undefined ||
-    params.verified !== undefined
+    params.verified !== undefined ||
+    params.createdAfter !== undefined
   );
 }

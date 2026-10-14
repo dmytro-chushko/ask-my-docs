@@ -14,6 +14,7 @@ const FILTER_PATCH_KEYS = [
   'search',
   'role',
   'verified',
+  'createdAfter',
   'sortBy',
   'sortOrder',
 ] as const satisfies ReadonlyArray<keyof AdminUsersListQuery>;
@@ -60,6 +61,22 @@ function parseVerified(value: string | null): boolean | undefined {
   }
 
   return undefined;
+}
+
+function parseCreatedAfter(
+  value: string | null,
+): AdminUsersListQuery['createdAfter'] | undefined {
+  if (value === null || value === '') {
+    return undefined;
+  }
+
+  const parsed = new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return undefined;
+  }
+
+  return parsed;
 }
 
 function parseSortBy(
@@ -112,6 +129,7 @@ export function parseAdminUsersListParams(
     search: normalizeSearch(searchParams.get('search')),
     role: parseRole(searchParams.get('role')),
     verified: parseVerified(searchParams.get('verified')),
+    createdAfter: parseCreatedAfter(searchParams.get('createdAfter')),
     sortBy:
       parseSortBy(searchParams.get('sortBy')) ??
       DEFAULT_ADMIN_USERS_LIST_QUERY.sortBy,
@@ -148,6 +166,10 @@ export function serializeAdminUsersListParams(
 
   if (query.verified !== undefined) {
     params.set('verified', query.verified ? 'true' : 'false');
+  }
+
+  if (query.createdAfter !== undefined) {
+    params.set('createdAfter', query.createdAfter.toISOString());
   }
 
   if (query.sortBy !== DEFAULT_ADMIN_USERS_LIST_QUERY.sortBy) {

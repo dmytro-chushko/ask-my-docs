@@ -79,6 +79,10 @@ function buildWhere(query: AdminUsersListQuery): Prisma.UserWhereInput {
     filters.push({ emailVerified: query.verified });
   }
 
+  if (query.createdAfter !== undefined) {
+    filters.push({ createdAt: { gte: query.createdAfter } });
+  }
+
   return filters.length > 0 ? { AND: filters } : {};
 }
 
