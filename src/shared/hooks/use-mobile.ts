@@ -1,21 +1,8 @@
-import * as React from 'react';
+import { useMaxWidth } from '@/shared/hooks/use-max-width';
 
+/** Phone-first layouts (tables → cards). Matches Tailwind `md` (768px). */
 const MOBILE_BREAKPOINT = 768;
 
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState(false);
-
-  React.useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
-    const onChange = () => {
-      setIsMobile(mql.matches);
-    };
-
-    onChange();
-    mql.addEventListener('change', onChange);
-
-    return () => mql.removeEventListener('change', onChange);
-  }, []);
-
-  return isMobile;
+  return useMaxWidth(MOBILE_BREAKPOINT);
 }
