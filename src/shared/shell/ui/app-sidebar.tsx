@@ -6,10 +6,12 @@ import type { ComponentProps } from 'react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
 import { stripLocalePrefix } from '@/shared/auth/auth-routes';
+import { useMaxWidth } from '@/shared/hooks/use-max-width';
 import { sidebarNavConfig } from '@/shared/shell/config/sidebar-nav-config';
 import { isNavItemActive } from '@/shared/shell/lib/is-nav-item-active';
 import type { SidebarScope } from '@/shared/shell/model/nav-types';
 import {
+  SIDEBAR_SHEET_MAX_WIDTH,
   Sidebar,
   SidebarContent,
   SidebarGroup,
@@ -25,7 +27,7 @@ import {
 } from '@/shared/ui/sidebar';
 
 const sidebarBelowHeaderClassName =
-  'top-0 h-full! md:top-[var(--header-height)] md:h-[calc(100svh-var(--header-height))]!';
+  'top-0 h-full! min-[992px]:top-[var(--header-height)] min-[992px]:h-[calc(100svh-var(--header-height))]!';
 
 type AppSidebarProps = ComponentProps<typeof Sidebar> & {
   scope: SidebarScope;
@@ -41,13 +43,12 @@ export function AppSidebar({
   const t = useTranslations(labelNamespace);
   const pathname = usePathname();
   const pathnameWithoutLocale = stripLocalePrefix(pathname, routing.locales);
-  const { isMobile, setOpenMobile } = useSidebar();
+  const { setOpenMobile } = useSidebar();
+  const isSheetLayout = useMaxWidth(SIDEBAR_SHEET_MAX_WIDTH);
 
   const closeSidebarAfterNavigate = () => {
-    if (isMobile) {
+    if (isSheetLayout) {
       setOpenMobile(false);
-
-      return;
     }
   };
 
