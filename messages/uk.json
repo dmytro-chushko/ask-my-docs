@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "title": "Next Auth Admin",
+    "title": "Ask My Docs",
     "description": "Standalone Next.js scaffold з i18n і темою"
   },
   "header": {
-    "appTitle": "Next Auth Admin",
+    "appTitle": "Ask My Docs",
     "themeDark": "Темна тема",
     "themeLight": "Світла тема",
     "themeSystem": "Як у системі",
