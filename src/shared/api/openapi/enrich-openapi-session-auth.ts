@@ -34,8 +34,12 @@ const PROTECTED_OPERATIONS: ReadonlyArray<{
   { path: '/users/me/avatar/upload-intent', method: 'post' },
   { path: '/users/me/avatar/confirm', method: 'post' },
   { path: '/users/me/avatar', method: 'delete' },
+  { path: '/documents', method: 'get' },
+  { path: '/documents/upload-intent', method: 'post' },
+  { path: '/documents/confirm', method: 'post' },
+  { path: '/documents/{id}', method: 'get' },
+  { path: '/documents/{id}', method: 'delete' },
 ];
-
 /**
  * Adds OpenAPI cookie security scheme and marks session-protected routes.
  */

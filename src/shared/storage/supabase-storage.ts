@@ -6,14 +6,20 @@ import {
   AVATAR_MAX_BYTES,
   AVATAR_SIGNED_URL_TTL_SECONDS,
   CONTENT_TYPE_TO_EXTENSION,
+  DOCUMENT_MAX_BYTES,
+  DOCUMENT_SIGNED_URL_TTL_SECONDS,
   type AvatarContentType,
   type AvatarUploadIntentResult,
+  type DocumentContentType,
+  type DocumentUploadIntentResult,
 } from './storage.constants';
 import {
   detectAvatarContentType,
   extractStoragePathFromPublicUrl,
   isAvatarPathOwnedByUser,
   isManagedAvatarPublicUrl,
+  isPdfBuffer,
+  isUserScopedStoragePath,
 } from './storage.utils';
 import {
   getSupabaseStorageConfig,
@@ -173,5 +179,89 @@ export async function deleteManagedAvatarIfPresent(
   if (error !== null) {
     console.error('[storage] delete object failed', error.message);
     throw new AvatarStorageError(500, 'Could not delete avatar file.');
+  }
+}
+
+export async function createDocumentUploadIntent(
+  userId: string,
+  input: { contentType: DocumentContentType; contentLength: number },
+): Promise<DocumentUploadIntentResult> {
+  if (input.contentLength > DOCUMENT_MAX_BYTES) {
+    throw new AvatarStorageError(400, 'Document file is too large.');
+  }
+
+  if (input.contentType !== 'application/pdf') {
+    throw new AvatarStorageError(400, 'Only PDF documents are supported.');
+  }
+
+  const { config, client: supabase } = getStorage();
+  const path = `${config.assetsPrefix}/${userId}/${crypto.randomUUID()}.pdf`;
+
+  const { data, error } = await supabase.storage
+    .from(config.bucket)
+    .createSignedUploadUrl(path, { upsert: false });
+
+  if (error !== null || data === null) {
+    console.error(
+      '[storage] document signed upload URL failed',
+      error?.message,
+    );
+    throw new AvatarStorageError(500, 'Could not prepare document upload.');
+  }
+
+  const expiresAt = new Date(
+    Date.now() + DOCUMENT_SIGNED_URL_TTL_SECONDS * 1000,
+  );
+
+  return {
+    uploadUrl: data.signedUrl,
+    path: data.path,
+    expiresAt,
+    confirmToken: createAvatarConfirmToken(userId, data.path, expiresAt),
+  };
+}
+
+export async function assertUploadedDocument(
+  path: string,
+  userId: string,
+): Promise<{ byteSize: number }> {
+  const { config, client: supabase } = getStorage();
+
+  if (!isUserScopedStoragePath(path, userId, config.assetsPrefix)) {
+    throw new AvatarStorageError(400, 'Invalid document path.');
+  }
+
+  if (!path.toLowerCase().endsWith('.pdf')) {
+    throw new AvatarStorageError(400, 'Invalid document path.');
+  }
+
+  const { data, error } = await supabase.storage
+    .from(config.bucket)
+    .download(path);
+
+  if (error !== null || data === null) {
+    throw new AvatarStorageError(400, 'Uploaded document was not found.');
+  }
+
+  if (data.size > DOCUMENT_MAX_BYTES) {
+    throw new AvatarStorageError(400, 'Document file is too large.');
+  }
+
+  const headerBytes = new Uint8Array(await data.slice(0, 5).arrayBuffer());
+
+  if (!isPdfBuffer(headerBytes)) {
+    throw new AvatarStorageError(400, 'Uploaded file is not a valid PDF.');
+  }
+
+  return { byteSize: data.size };
+}
+
+export async function deleteDocumentObject(path: string): Promise<void> {
+  const { config, client: supabase } = getStorage();
+  const { error } = await supabase.storage.from(config.bucket).remove([path]);
+
+  if (error !== null) {
+    console.error('[storage] delete document failed', error.message);
+    throw new AvatarStorageError(500, 'Could not delete document file.');
   }
 }

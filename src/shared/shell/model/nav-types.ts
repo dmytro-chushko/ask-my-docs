@@ -9,8 +9,8 @@ export type NavItem<TId extends string = string> = {
   icon: LucideIcon;
 };
 
-/** Sidebar scopes used by the app shell. Expand when profile/dashboard need sidebars. */
-export type SidebarScope = 'admin';
+/** Sidebar scopes used by the app shell (`admin` panel vs product `app`). */
+export type SidebarScope = 'admin' | 'app';
 
 export type SidebarNavConfig<TId extends string = string> = {
   labelNamespace: string;

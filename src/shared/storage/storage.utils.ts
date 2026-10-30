@@ -54,13 +54,28 @@ export function isAvatarPathOwnedByUser(
   userId: string,
   avatarsPrefix: string,
 ): boolean {
+  return isUserScopedStoragePath(path, userId, avatarsPrefix);
+}
+
+/** `prefix/userId/...` without path traversal. */
+export function isUserScopedStoragePath(
+  path: string,
+  userId: string,
+  prefix: string,
+): boolean {
   if (path.includes('..') || path.includes('\\')) {
     return false;
   }
 
-  const expectedPrefix = `${avatarsPrefix}/${userId}/`;
+  const expectedPrefix = `${prefix}/${userId}/`;
 
   return path.startsWith(expectedPrefix) && path.length > expectedPrefix.length;
+}
+
+const PDF_MAGIC = [0x25, 0x50, 0x44, 0x46] as const; // %PDF
+
+export function isPdfBuffer(buffer: Uint8Array): boolean {
+  return matchesMagicBytes(buffer, PDF_MAGIC);
 }
 
 export function extractStoragePathFromPublicUrl(
