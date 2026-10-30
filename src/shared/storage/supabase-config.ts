@@ -3,6 +3,8 @@ export type SupabaseStorageConfig = {
   serviceRoleKey: string;
   bucket: string;
   avatarsPrefix: string;
+  /** PDF / document objects (same bucket as avatars). */
+  assetsPrefix: string;
 };
 
 /** `undefined` = not resolved yet; `null` = missing env. */
@@ -14,6 +16,7 @@ function readSupabaseStorageConfig(): SupabaseStorageConfig | null {
   const bucket = process.env.SUPABASE_STORAGE_BUCKET?.trim() || 'avatars';
   const avatarsPrefix =
     process.env.SUPABASE_AVATARS_PREFIX?.trim() || 'avatars';
+  const assetsPrefix = process.env.SUPABASE_ASSETS_PREFIX?.trim() || 'assets';
 
   if (!url || !serviceRoleKey) {
     return null;
@@ -24,6 +27,7 @@ function readSupabaseStorageConfig(): SupabaseStorageConfig | null {
     serviceRoleKey,
     bucket,
     avatarsPrefix,
+    assetsPrefix,
   };
 }
 

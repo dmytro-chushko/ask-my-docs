@@ -37,7 +37,20 @@ const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 /** Sheet layout below this width (Bootstrap `lg` / between Tailwind `md` and `lg`). */
 export const SIDEBAR_SHEET_MAX_WIDTH = 992;
-const DISABLED_SIDEBAR_PATHS = ['/profile'];
+/** Paths that mount `AppSidebar` (app or admin). Elsewhere hide the header trigger. */
+function isSidebarShellPath(pathnameWithoutLocale: string): boolean {
+  return (
+    pathnameWithoutLocale === '/admin' ||
+    pathnameWithoutLocale.startsWith('/admin/') ||
+    pathnameWithoutLocale === '/dashboard' ||
+    pathnameWithoutLocale === '/documents' ||
+    pathnameWithoutLocale.startsWith('/documents/') ||
+    pathnameWithoutLocale === '/chat' ||
+    pathnameWithoutLocale.startsWith('/chat/') ||
+    pathnameWithoutLocale === '/notes' ||
+    pathnameWithoutLocale.startsWith('/notes/')
+  );
+}
 
 type SidebarContextProps = {
   state: 'expanded' | 'collapsed';
@@ -79,9 +92,7 @@ function SidebarProvider({
   const [openMobile, setOpenMobile] = React.useState(false);
   const pathname = usePathname();
   const pathnameWithoutLocale = stripLocalePrefix(pathname, routing.locales);
-  const isSidebarDisabled = DISABLED_SIDEBAR_PATHS.includes(
-    pathnameWithoutLocale,
-  );
+  const isSidebarDisabled = !isSidebarShellPath(pathnameWithoutLocale);
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.

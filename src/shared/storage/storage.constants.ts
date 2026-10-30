@@ -24,3 +24,20 @@ export type AvatarUploadIntentResult = {
   /** HMAC token required on confirm (binds path + userId + expiry). */
   confirmToken: string;
 };
+
+export const DOCUMENT_SIGNED_URL_TTL_SECONDS = 300;
+
+export const DOCUMENT_MAX_BYTES = 20 * 1024 * 1024;
+
+export const DOCUMENT_ALLOWED_CONTENT_TYPES = ['application/pdf'] as const;
+
+export type DocumentContentType =
+  (typeof DOCUMENT_ALLOWED_CONTENT_TYPES)[number];
+
+export type DocumentUploadIntentResult = {
+  uploadUrl: string;
+  path: string;
+  expiresAt: Date;
+  /** HMAC token required on confirm (binds path + userId + expiry). */
+  confirmToken: string;
+};
