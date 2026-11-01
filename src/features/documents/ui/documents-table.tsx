@@ -88,9 +88,6 @@ export function DocumentsTable() {
   if (query.isPending && query.data === undefined) {
     return (
       <div className="space-y-4">
-        <div className="flex justify-end">
-          <DocumentsUploadButton />
-        </div>
         <DocumentsTableSkeleton isMobile={isMobile} />
       </div>
     );
@@ -122,7 +119,7 @@ export function DocumentsTable() {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <DocumentsUploadButton />
+        {rows.length > 0 && <DocumentsUploadButton />}
       </div>
       <div
         aria-busy={query.isFetching || undefined}
