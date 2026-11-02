@@ -2,24 +2,18 @@
 
 import { useTable } from '@tanstack/react-table';
 import { useFormatter, useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
-import {
-  useDeleteDocumentMutation,
-  useDocumentsQuery,
-} from '@/entities/document';
+import { useDocumentsQuery } from '@/entities/document';
 import { documentsTableFeatures } from '@/features/documents/model/documents-table-features';
 import { createDocumentsTableColumns } from '@/features/documents/ui/documents-table-columns';
-import type { DocumentListItem } from '@/shared/api';
+import { useModal } from '@/shared/modal/use-modal';
 
 export function useDocumentsTable() {
   const t = useTranslations('documents');
   const format = useFormatter();
   const query = useDocumentsQuery();
-  const deleteMutation = useDeleteDocumentMutation();
-  const [pendingDelete, setPendingDelete] = useState<DocumentListItem | null>(
-    null,
-  );
+  const { open } = useModal();
 
   const columns = useMemo(
     () =>
@@ -27,12 +21,14 @@ export function useDocumentsTable() {
         t,
         formatCreatedAt: (value) =>
           format.dateTime(value, { dateStyle: 'medium', timeStyle: 'short' }),
-        onDelete: setPendingDelete,
-        isDeletingId: deleteMutation.isPending
-          ? (deleteMutation.variables ?? null)
-          : null,
+        onDelete: (document) => {
+          open('document-deletion', {
+            documentId: document.id,
+            title: document.title,
+          });
+        },
       }),
-    [deleteMutation.isPending, deleteMutation.variables, format, t],
+    [format, open, t],
   );
 
   const table = useTable({
@@ -45,8 +41,5 @@ export function useDocumentsTable() {
   return {
     table,
     query,
-    pendingDelete,
-    setPendingDelete,
-    deleteMutation,
   };
 }

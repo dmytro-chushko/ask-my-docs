@@ -2,24 +2,11 @@
 
 import { flexRender } from '@tanstack/react-table';
 import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 
 import { useDocumentsTable } from '@/features/documents/hooks/use-documents-table';
 import { DocumentsTableCards } from '@/features/documents/ui/documents-table-cards';
 import { DocumentsUploadButton } from '@/features/documents/ui/documents-upload-button';
-import { getApiErrorMessage } from '@/shared/api';
-import { ApiRequestError } from '@/shared/api/errors/api-request-error';
 import { useIsMobile } from '@/shared/hooks/use-mobile';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/shared/ui/alert-dialog';
 import { Button } from '@/shared/ui/button';
 import { Skeleton } from '@/shared/ui/skeleton';
 import {
@@ -63,27 +50,8 @@ function DocumentsTableSkeleton({ isMobile }: { isMobile: boolean }) {
 export function DocumentsTable() {
   const t = useTranslations('documents');
   const isMobile = useIsMobile();
-  const { table, query, pendingDelete, setPendingDelete, deleteMutation } =
-    useDocumentsTable();
+  const { table, query } = useDocumentsTable();
   const rows = table.getRowModel().rows;
-
-  async function confirmDelete() {
-    if (!pendingDelete) {
-      return;
-    }
-
-    try {
-      await deleteMutation.mutateAsync(pendingDelete.id);
-      toast.success(t('deleteSuccess'));
-      setPendingDelete(null);
-    } catch (error: unknown) {
-      const message =
-        error instanceof ApiRequestError
-          ? getApiErrorMessage(error.status, { error: error.message })
-          : t('deleteFailed');
-      toast.error(message);
-    }
-  }
 
   if (query.isPending && query.data === undefined) {
     return (
@@ -119,7 +87,7 @@ export function DocumentsTable() {
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        {rows.length > 0 && <DocumentsUploadButton />}
+        {rows.length > 0 ? <DocumentsUploadButton /> : null}
       </div>
       <div
         aria-busy={query.isFetching || undefined}
@@ -169,42 +137,6 @@ export function DocumentsTable() {
           </Table>
         )}
       </div>
-
-      <AlertDialog
-        open={pendingDelete !== null}
-        onOpenChange={(open) => {
-          if (!open) {
-            setPendingDelete(null);
-          }
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t('deleteConfirmTitle')}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t('deleteConfirmDescription', {
-                title: pendingDelete?.title ?? '',
-              })}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleteMutation.isPending}>
-              {t('deleteCancel')}
-            </AlertDialogCancel>
-            <AlertDialogAction
-              disabled={deleteMutation.isPending}
-              onClick={(event) => {
-                event.preventDefault();
-                void confirmDelete();
-              }}
-            >
-              {deleteMutation.isPending
-                ? t('deleteDeleting')
-                : t('deleteConfirm')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }

@@ -18,7 +18,6 @@ type CreateDocumentsTableColumnsOptions = {
   t: DocumentsTableTranslator;
   formatCreatedAt: (value: Date) => string;
   onDelete: (document: DocumentListItem) => void;
-  isDeletingId: string | null;
 };
 
 const columnHelper = createColumnHelper<
@@ -45,7 +44,6 @@ export function createDocumentsTableColumns({
   t,
   formatCreatedAt,
   onDelete,
-  isDeletingId,
 }: CreateDocumentsTableColumnsOptions): ColumnDef<
   DocumentsTableFeatures,
   DocumentListItem,
@@ -102,7 +100,6 @@ export function createDocumentsTableColumns({
             variant="ghost"
             size="sm"
             className="text-destructive hover:text-destructive"
-            disabled={isDeletingId === row.original.id}
             onClick={() => {
               onDelete(row.original);
             }}
