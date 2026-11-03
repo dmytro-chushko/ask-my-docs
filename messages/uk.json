@@ -60,7 +60,7 @@
     "open": "Відкрити",
     "delete": "Видалити",
     "deleteConfirmTitle": "Видалити документ?",
-    "deleteConfirmDescription": "«{title}» буде видалено з бібліотеки та сховища. Цю дію не можна скасувати.",
+    "deleteConfirmDescription": "Цю дію не можна скасувати. Файл буде видалено з бібліотеки та сховища.",
     "deleteCancel": "Скасувати",
     "deleteConfirm": "Видалити",
     "deleteDeleting": "Видалення…",

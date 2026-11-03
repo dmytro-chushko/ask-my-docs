@@ -60,7 +60,7 @@
     "open": "Open",
     "delete": "Delete",
     "deleteConfirmTitle": "Delete document?",
-    "deleteConfirmDescription": "“{title}” will be removed from your library and storage. This cannot be undone.",
+    "deleteConfirmDescription": "This cannot be undone. The file will be removed from your library and storage.",
     "deleteCancel": "Cancel",
     "deleteConfirm": "Delete",
     "deleteDeleting": "Deleting…",
