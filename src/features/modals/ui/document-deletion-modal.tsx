@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 
 import { useDeleteDocumentMutation } from '@/entities/document';
+import { useRouter } from '@/i18n/navigation';
 import { getApiErrorMessage } from '@/shared/api';
 import { ApiRequestError } from '@/shared/api/errors/api-request-error';
 import { useModal } from '@/shared/modal/use-modal';
@@ -21,13 +22,16 @@ import { Button } from '@/shared/ui/button';
 function DocumentDeletionModalContent({
   documentId,
   title,
+  redirectTo,
   onClose,
 }: {
   documentId: string;
   title: string;
+  redirectTo?: string;
   onClose: () => void;
 }) {
   const t = useTranslations('documents');
+  const router = useRouter();
   const deleteMutation = useDeleteDocumentMutation();
   const isPending = deleteMutation.isPending;
 
@@ -36,6 +40,10 @@ function DocumentDeletionModalContent({
       await deleteMutation.mutateAsync(documentId);
       toast.success(t('deleteSuccess'));
       onClose();
+
+      if (redirectTo) {
+        router.push(redirectTo);
+      }
     } catch (error: unknown) {
       const message =
         error instanceof ApiRequestError
@@ -92,6 +100,7 @@ export function DocumentDeletionModal() {
         <DocumentDeletionModalContent
           documentId={payload.documentId}
           title={payload.title}
+          redirectTo={payload.redirectTo}
           onClose={close}
         />
       ) : null}

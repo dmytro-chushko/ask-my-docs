@@ -92,6 +92,11 @@
       "error": "Error",
       "byteSize": "Size",
       "bytes": "{count, number} bytes",
+      "createdAt": "Uploaded",
+      "updatedAt": "Updated",
+      "ask": "Ask about this",
+      "askNotReady": "Available after the document is indexed (status Ready).",
+      "askComingSoon": "Chat will be available in a later step.",
       "ingestHint": "Indexing for Q&A will be available in a later step. For now the file is stored and listed in your library."
     }
   },

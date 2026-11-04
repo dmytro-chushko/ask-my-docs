@@ -20,5 +20,7 @@ export type ModalPayloads = {
   'document-deletion': {
     documentId: string;
     title: string;
+    /** After successful delete, navigate here (e.g. `/documents` from detail). */
+    redirectTo?: string;
   };
 };
