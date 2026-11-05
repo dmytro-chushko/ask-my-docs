@@ -3,9 +3,10 @@
 import { createColumnHelper, type ColumnDef } from '@tanstack/react-table';
 import { Trash2 } from 'lucide-react';
 
+import { documentStatusBadgeVariant } from '@/features/documents/lib/document-status-badge-variant';
 import type { DocumentsTableFeatures } from '@/features/documents/model/documents-table-features';
 import { Link } from '@/i18n/navigation';
-import type { DocumentListItem, DocumentStatus } from '@/shared/api';
+import type { DocumentListItem } from '@/shared/api';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 
@@ -24,21 +25,6 @@ const columnHelper = createColumnHelper<
   DocumentsTableFeatures,
   DocumentListItem
 >();
-
-function statusVariant(
-  status: DocumentStatus,
-): 'default' | 'secondary' | 'destructive' | 'outline' {
-  switch (status) {
-    case 'ready':
-      return 'default';
-    case 'failed':
-      return 'destructive';
-    case 'processing':
-      return 'secondary';
-    default:
-      return 'outline';
-  }
-}
 
 export function createDocumentsTableColumns({
   t,
@@ -74,7 +60,9 @@ export function createDocumentsTableColumns({
         const status = getValue();
 
         return (
-          <Badge variant={statusVariant(status)}>{t(`status.${status}`)}</Badge>
+          <Badge variant={documentStatusBadgeVariant(status)}>
+            {t(`status.${status}`)}
+          </Badge>
         );
       },
     }),
