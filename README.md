@@ -1,4 +1,4 @@
-# Next Auth Admin
+# Next Auth Admin.
 
 Standalone **Next.js App Router** starter with production-minded auth, a thin admin panel, typed domain APIs, and Feature-Sliced Design (FSD).
 
