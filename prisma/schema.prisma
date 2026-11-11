@@ -133,9 +133,28 @@ model Document {
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chunks DocumentChunk[]
 
   @@index([userId, createdAt])
   @@unique([storagePath])
   @@map("document")
+}
+
+/// Text piece of a Document with a pgvector embedding for similarity search (L4+).
+/// Embedding dimension must match OPENROUTER_EMBEDDING_DIMENSIONS (currently 1536).
+model DocumentChunk {
+  id         String                       @id @default(cuid())
+  documentId String
+  chunkIndex Int
+  content    String
+  /// pgvector column; Prisma cannot type this natively — use raw SQL for write/search.
+  embedding  Unsupported("vector(1536)")
+  createdAt  DateTime                     @default(now())
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, chunkIndex])
+  @@index([documentId])
+  @@map("document_chunk")
 }
