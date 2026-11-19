@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 import { createClient } from '@supabase/supabase-js';
 
+import { chunkText } from '../src/shared/rag/chunk-text';
 import { parsePdf } from '../src/shared/rag/parse-pdf';
 
 async function main() {
@@ -37,15 +38,44 @@ async function main() {
   const bytes = new Uint8Array(await data.arrayBuffer());
   // PDF.js may detach the ArrayBuffer during parse — log size before calling parsePdf.
   const byteLength = bytes.byteLength;
-  const result = await parsePdf(bytes);
+  const parsed = await parsePdf(bytes);
+  const chunks = chunkText(parsed.text);
+  const chunkSizes = chunks.map((chunk) => chunk.content.length);
+  const firstChunk = chunks[0];
 
   // console.log('path:', storagePath);
   // console.log('bytes:', byteLength);
-  // console.log('pages:', result.totalPages);
-  // console.log('chars:', result.text.length);
-  // console.log('preview:', result.text.slice(0, 300).replace(/\s+/g, ' '));
+  // console.log('pages:', parsed.totalPages);
+  // console.log('chars:', parsed.text.length);
+  // console.log('chunks:', chunks.length);
+  // console.log(
+  //   'chunkSizes:',
+  //   chunkSizes.length > 0
+  //     ? {
+  //         min: Math.min(...chunkSizes),
+  //         max: Math.max(...chunkSizes),
+  //         avg: Math.round(
+  //           chunkSizes.reduce((sum, size) => sum + size, 0) / chunkSizes.length,
+  //         ),
+  //       }
+  //     : null,
+  // );
+  // console.log(
+  //   'firstChunk:',
+  //   firstChunk
+  //     ? {
+  //         chunkIndex: firstChunk.chunkIndex,
+  //         chars: firstChunk.content.length,
+  //         preview: firstChunk.content.slice(0, 240).replace(/\s+/g, ' '),
+  //       }
+  //     : null,
+  // );
 
-  return { result, byteLength };
+  return {
+    byteLength,
+    chunkSizes,
+    firstChunk,
+  };
 }
 
 main().catch((error) => {
