@@ -1,3 +1,4 @@
 #!/usr/bin/env sh
 bash scripts/security/worm-scan.sh || exit 1
-npm run precheck
+npm run precheck || exit 1
+npm run test || exit 1
