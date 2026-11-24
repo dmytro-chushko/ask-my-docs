@@ -149,7 +149,7 @@ model DocumentChunk {
   chunkIndex Int
   content    String
   /// pgvector column; Prisma cannot type this natively — use raw SQL for write/search.
-  embedding  Unsupported("vector(1536)")
+  embedding  Unsupported("vector(2048)")
   createdAt  DateTime                     @default(now())
 
   document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
