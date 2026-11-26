@@ -142,7 +142,7 @@ model Document {
 }
 
 /// Text piece of a Document with a pgvector embedding for similarity search (L4+).
-/// Embedding dimension must match OPENROUTER_EMBEDDING_DIMENSIONS (currently 1536).
+/// Embedding dimension must match OPENROUTER_EMBEDDING_DIMENSIONS (currently 2048).
 model DocumentChunk {
   id         String                       @id @default(cuid())
   documentId String
